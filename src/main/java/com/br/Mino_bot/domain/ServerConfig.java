@@ -9,6 +9,7 @@ public class ServerConfig {
 	@Id
 	private String id;
 	private String prefix;
+	private boolean active;
 	
 	public ServerConfig() {
 	}
@@ -30,5 +31,12 @@ public class ServerConfig {
 	public void setPrefix(String prefix) {
 		this.prefix = prefix;
 	}
+	public boolean isActive() {
+		return active;
+	}
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
 	
 }

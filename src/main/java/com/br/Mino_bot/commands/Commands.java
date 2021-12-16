@@ -35,7 +35,6 @@ public class Commands extends ListenerAdapter {
 	@Override
 	public void onMessageReactionAdd(MessageReactionAddEvent event) {
 		System.out.println("onMessageReaction");
-		System.out.println(event);
 	}
 	
 	@Override
@@ -95,6 +94,8 @@ public class Commands extends ListenerAdapter {
 				
 				if(command.equalsIgnoreCase(TextCommandsEnum.HELP.getCommand())) {
 					commandHelp(event, command, param);
+				} else if(command.equalsIgnoreCase(TextCommandsEnum.CHANGE_PREFIX.getCommand())) {
+					commandChangePrefix(event, command, param);
 				}
 				
 				System.out.println("Comando: " + command);
@@ -131,17 +132,30 @@ public class Commands extends ListenerAdapter {
 			availableCommands += MinoBot.DEFAULT_PREFIX + textCommand.getCommand() + ": " + textCommand.getDescription() + "\n\n";
 		}
 		info.setDescription(availableCommands);
-		info.addField("Creator", "Marcelol", false);
+		info.addField("Mais infomações:", "https://www.teste.com.br", false);
 		info.setColor(0xffff00);
 		
 		event.getChannel().sendTyping().queue();
 		Message msg = event.getChannel().sendMessageEmbeds(info.build()).complete();
-		//msg.addReaction(":one:");
+		msg.addReaction("\uD83C\uDDEC\uD83C\uDDE7").queue();
 		
 		
 		//msg.addReaction();
 		info.clear();
 		
+	}
+	
+	public void commandChangePrefix(MessageReceivedEvent event, String command, String param) {
+		System.out.println("Command Change Prefix");
+		setPrefix(event.getGuild().getId(), param);
+		
+		EmbedBuilder info = new EmbedBuilder();
+		info.setTitle("Mino:");
+		info.setDescription("Prefixo alterado para: " + getServerPrefix(event.getGuild().getId()));
+		info.setColor(0xffff00);
+		event.getChannel().sendTyping().queue();
+		event.getChannel().sendMessageEmbeds(info.build()).complete();
+		info.clear();
 	}
 
 	private void xingarFarmacia(MessageReceivedEvent event) {
@@ -171,4 +185,10 @@ public class Commands extends ListenerAdapter {
 			}
 		}
 	}
+	
+	private void setPrefix(String serverId, String newPrefix) {
+		ServerConfig config = serverConfigService.updateServerPrefix(serverId, newPrefix);
+		this.serverPrefix.put(serverId, newPrefix);
+	}
+	
 }

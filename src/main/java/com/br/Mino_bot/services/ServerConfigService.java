@@ -37,5 +37,11 @@ public class ServerConfigService {
 				"Object not found! Id: " + serverId + ", Tipo: " + ServerConfig.class.getName()));
 		
 	}
+	
+	public ServerConfig updateServerPrefix(String serverId, String newPrefix) {
+		ServerConfig config = findServerConfigById(serverId);
+		config.setPrefix(newPrefix);
+		return repo.save(config);
+	}
 
 }
